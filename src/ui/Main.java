@@ -96,16 +96,7 @@ public class Main extends Application {
 				if (needsPreview) {
 					update(); // generate the next preview
 				} else {
-
-					render = new Iterator(transformations, plotter, 10000000, 500);
-
-					render.setOnSucceeded(event1 -> {
-						showImg(render.getValue());
-					});
-					renderProgress.bind(render.progressProperty());
-
-					render.threadRun();
-
+					render(1);
 				}
 			});
 
@@ -113,6 +104,18 @@ public class Main extends Application {
 		}
 
 
+	}
+
+	private void render(int iteration)  {
+		render = new Iterator(transformations, plotter, (long) (100000 * Math.pow(1.5, iteration)), 500, false);
+
+		render.setOnSucceeded(event1 -> {
+			showImg(render.getValue());
+			render(iteration+1);
+		});
+		renderProgress.bind(render.progressProperty());
+
+		render.threadRun();
 	}
 
 	private void showImg(Image value) {

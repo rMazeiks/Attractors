@@ -1,8 +1,6 @@
 package plotter;
 
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.LongProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.concurrent.Task;
 import javafx.scene.image.Image;
@@ -12,16 +10,22 @@ import java.util.List;
 
 public class Iterator extends Task<Image> {
 	private LongProperty samples;
-	private IntegerProperty resetInterval;
+	private LongProperty resetInterval;
+	private boolean resetPlotter;
 	private List<Transformation> transformations;
 	private Plotter plotter;
 
-	public Iterator(List<Transformation> t, Plotter p, long samples, int resetInterval) {
+	public Iterator(List<Transformation> t, Plotter p, long samples, long resetInterval, boolean resetPlotter) {
 		super();
 		plotter = p;
 		transformations = t;
 		this.samples = new SimpleLongProperty(samples);
-		this.resetInterval = new SimpleIntegerProperty(resetInterval);
+		this.resetInterval = new SimpleLongProperty(resetInterval);
+		this.resetPlotter = resetPlotter;
+	}
+
+	public Iterator(List<Transformation> transformations, Plotter plotter, long samples, long resetInterval) {
+		this(transformations, plotter, samples, resetInterval, true);
 	}
 
 	public long getSamples() {
@@ -36,15 +40,15 @@ public class Iterator extends Task<Image> {
 		return samples;
 	}
 
-	public int getResetInterval() {
+	public long getResetInterval() {
 		return resetInterval.get();
 	}
 
-	public void setResetInterval(int resetInterval) {
+	public void setResetInterval(long resetInterval) {
 		this.resetInterval.set(resetInterval);
 	}
 
-	public IntegerProperty resetIntervalProperty() {
+	public LongProperty resetIntervalProperty() {
 		return resetInterval;
 	}
 
@@ -59,7 +63,8 @@ public class Iterator extends Task<Image> {
 
 	@Override
 	protected Image call() {
-		plotter.reset();
+		if(resetPlotter) plotter.reset();
+
 		double[] point = null; // it will be initialized in the first iteration, but my IDE was complaining
 		for (long i = 0; i < samples.get(); i++) {
 			if (isCancelled()) {
