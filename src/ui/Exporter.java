@@ -1,13 +1,11 @@
 package ui;
 
-import elements.PosIntFilter;
+import elements.PositiveIntegerFilter;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -44,15 +42,15 @@ public class Exporter extends Stage {
 		{
 			Label wLabel = new Label("Width:");
 			TextField w = new TextField();
-			w.setTextFormatter(PosIntFilter.getFormatter(width));
+			w.setTextFormatter(PositiveIntegerFilter.getFormatter(width));
 
 			Label hLabel = new Label("Height:");
 			TextField h = new TextField();
-			h.setTextFormatter(PosIntFilter.getFormatter(height));
+			h.setTextFormatter(PositiveIntegerFilter.getFormatter(height));
 
 			Label iLabel = new Label("Iterations:");
 			TextField iterations = new TextField();
-			iterations.setTextFormatter(PosIntFilter.getFormatter(iterationProperty));
+			iterations.setTextFormatter(PositiveIntegerFilter.getFormatter(iterationProperty));
 			inputs.getChildren().addAll(wLabel, w, hLabel, h, iLabel, iterations);
 			inputs.setSpacing(10);
 		}

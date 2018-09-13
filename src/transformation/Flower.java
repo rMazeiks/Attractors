@@ -12,7 +12,7 @@ import static java.lang.Math.*;
 public class Flower extends Transformation {
 
 	public Flower() {
-		initializeParams(8);
+		initializeParams(8, -2, 2);
 	}
 
 static 	String transformationName() {
@@ -26,7 +26,6 @@ static 	String transformationName() {
 
 	@Override
 	public double[] doTransform(double[] src) {
-		List<DoubleProperty> p = parameters;
 
 		return new double[]{
 				p(0)*sin(src[1])

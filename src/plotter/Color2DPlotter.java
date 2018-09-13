@@ -5,9 +5,15 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
+/**
+ * Plots three dimensions:
+ * [0] - the y axis
+ * [1] - the x axis
+ * [2] - changes the hue of the color plotted
+ */
 public class Color2DPlotter extends Plotter {
 	private long[][][] data;
-	private double zoom = 0.25;
+	private double zoom = 0.125;
 
 
 	public Color2DPlotter(int w, int h) {
@@ -17,10 +23,14 @@ public class Color2DPlotter extends Plotter {
 
 	@Override
 	public void plot(double[] point) {
-		int x = (int) ((point[1] * zoom / 2 + 0.5) * data[0].length);
-		int y = (int) ((point[0] * zoom / 2 + 0.5) * data.length);
+		int min = Math.min(data.length, data[0].length);
+		if(Double.isNaN(point[0])) System.out.println("sdfsdf");
+
+		int x = (int) ((point[1] * zoom) * min + data[0].length / 2);
+		int y = (int) ((point[0] * zoom) * min + data.length / 2);
 
 		if (x < 0 || y < 0 || x >= data[0].length || y >= data.length) return;
+
 		Color hsb = Color.hsb(colorize(point[2]), 0.8, 1);
 
 		double f = 100;
@@ -31,9 +41,9 @@ public class Color2DPlotter extends Plotter {
 	}
 
 	private double colorize(double v) {
-		double a = (v % 1)*360;
-		if (a < 0) a += 1; // I strongly dislike java's modulo. this entire method should take 2 characters
-		return a;
+		double a = (v % 1);
+		if (a < 0) a += 1;
+		return a*360;
 	}
 
 	@Override
@@ -50,7 +60,7 @@ public class Color2DPlotter extends Plotter {
 		WritableImage image = new WritableImage(data[0].length, data.length);
 
 		PixelWriter writer = image.getPixelWriter();
-		for (int y = 0; y < image.getHeight(); y++) {
+		for (int y = 0; y < image.getHeight(); y++) { // todo optimize in one go
 			for (int x = 0; x < image.getWidth(); x++) {
 				writer.setColor(x, y, Color.color(
 						bright((double) data[y][x][0] / max),

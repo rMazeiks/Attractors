@@ -19,7 +19,7 @@ class Buttons extends HBox {
 		Button save = new Button("Save");
 		save.setOnAction(event -> e.open());
 
-		Button random = new Button("Randomize all params");
+		Button random = new Button("Randomize parameters");
 		random.setOnAction(event -> {
 			for (Transformation transformation : main.getTransformations()) {
 				transformation.randomizeParams();

@@ -5,7 +5,10 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
-import static java.lang.Math.*;
+import java.util.Arrays;
+
+import static java.lang.Math.min;
+import static java.lang.Math.pow;
 
 public class Simple2dPlotter extends Plotter {
 	private int[][] count;
@@ -18,8 +21,9 @@ public class Simple2dPlotter extends Plotter {
 	}
 
 	public void plot(double[] point) {
-		int x = (int) ((point[1]  * zoom / 2 + 0.5) * count[0].length);
-		int y = (int) ((point[0]  * zoom / 2 + 0.5) * count.length);
+		int min = Math.min(count.length, count[0].length);
+		int x = (int) ((point[1] * zoom) * min + count[0].length / 2);
+		int y = (int) ((point[0] * zoom) * min + count.length / 2);
 		if (x < 0 || y < 0 || x >= count[0].length || y >= count.length) return;
 		count[y][x]++;
 	}
@@ -29,15 +33,15 @@ public class Simple2dPlotter extends Plotter {
 		int max = 0;
 		for (int y = 0; y < count.length; y++) {
 			for (int x = 0; x < count[0].length; x++) {
-				if(max<count[y][x]) max = count[y][x];
+				if (max < count[y][x]) max = count[y][x];
 			}
 		}
 		WritableImage image = new WritableImage(count[0].length, count.length);
 		PixelWriter pw = image.getPixelWriter();
 		for (int y = 0; y < count.length; y++) {
 			for (int x = 0; x < count[0].length; x++) {
-				double b = min(1, (double)count[y][x]/max);
-				b = 1-pow(1-b, 30);
+				double b = min(1, (double) count[y][x] / max);
+				b = 1 - pow(1 - b, 30);
 				pw.setColor(x, y, new Color(b, b, b, 1));
 			}
 		}
@@ -47,9 +51,7 @@ public class Simple2dPlotter extends Plotter {
 	@Override
 	public void reset() {
 		for (int y = 0; y < count.length; y++) {
-			for (int x = 0; x < count[0].length; x++) {
-				count[y][x] = 0;
-			}
+			Arrays.fill(count[y], 0);
 		}
 	}
 }

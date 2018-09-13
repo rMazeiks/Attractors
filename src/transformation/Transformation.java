@@ -1,5 +1,6 @@
 package transformation;
 
+import elements.Parameter;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 
@@ -9,7 +10,7 @@ import java.util.List;
 import static java.lang.StrictMath.random;
 
 public abstract class Transformation {
-	List<DoubleProperty> parameters;
+	List<Parameter> parameters;
 
 	Transformation() {
 		parameters = new ArrayList<>();
@@ -23,22 +24,22 @@ public abstract class Transformation {
 		return parameters.get(index).get();
 	}
 
-	void initializeParams(int number) {
+	void initializeParams(int number, double min, double max) {
 		for (int i = 0; i < number; i++) {
-			DoubleProperty dp = new SimpleDoubleProperty();
+			Parameter dp = new Parameter(0, "Parameter "+ (i+1), min, max);
 			parameters.add(dp);
 		}
 		randomizeParams();
 	}
 
 	public final void randomizeParams() {
-		for (DoubleProperty d : parameters) {
+		for (Parameter p : parameters) {
 			double v = random() + 1;
-			d.set(random() > 0.5 ? v : -v);
+			p.set(random() > 0.5 ? v : -v);
 		}
 	}
 
-	public final List<DoubleProperty> getParameters() {
+	public final List<Parameter> getParameters() {
 		return parameters;
 	}
 

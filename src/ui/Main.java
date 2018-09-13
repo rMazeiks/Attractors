@@ -1,5 +1,6 @@
 package ui;
 
+import elements.Parameter;
 import javafx.application.Application;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -12,12 +13,10 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import plotter.Color2DPlotter;
 import plotter.Iterator;
 import plotter.Plotter;
-import transformation.FourDimWeird2;
 import transformation.Transformation;
 import ui.sections.Control;
 
@@ -57,7 +56,6 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		plotter = new Color2DPlotter(800, 600);
-		transformations.add(new FourDimWeird2());
 
 		output = new ImageView();
 
@@ -106,12 +104,12 @@ public class Main extends Application {
 
 	}
 
-	private void render(int iteration)  {
+	private void render(int iteration) {
 		render = new Iterator(transformations, plotter, (long) (100000 * Math.pow(1.5, iteration)), 500, false);
 
 		render.setOnSucceeded(event1 -> {
 			showImg(render.getValue());
-			render(iteration+1);
+			render(iteration + 1);
 		});
 		renderProgress.bind(render.progressProperty());
 
@@ -120,5 +118,12 @@ public class Main extends Application {
 
 	private void showImg(Image value) {
 		output.setImage(value);
+	}
+
+	public void addTransformation(Transformation newOne) {
+		transformations.add(newOne);
+		for (Parameter p : newOne.getParameters()) {
+			p.addListener((obs, o, n) -> update());
+		}
 	}
 }

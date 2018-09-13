@@ -13,7 +13,7 @@ import static java.lang.Math.sin;
 public class FourDimWeird extends Transformation {
 
 	public FourDimWeird() {
-		initializeParams(8);
+		initializeParams(8, -2, 2);
 	}
 
 static 	String transformationName() {
@@ -27,16 +27,15 @@ static 	String transformationName() {
 
 	@Override
 	public double[] doTransform(double[] src) {
-		List<DoubleProperty> p = parameters;
 
 		return new double[]{
-				p.get(0).get()*sin(src[1])
-						+ p.get(1).get()*sin(src[2]),
-				p.get(2).get()*sin(src[2])
-						+ p.get(3).get()*cos(src[3]),
-				p.get(4).get()*sin(src[3])
-						+ p.get(5).get()*sin(src[0]),
-				p.get(6).get()*sin(src[0])
-						+ p.get(7).get()*sin(src[1])};
+				p(0)*sin(src[1])
+						+ p(1)*sin(src[2]),
+				p(2)*sin(src[2])
+						+ p(3)*cos(src[3]),
+				p(4)*sin(src[3])
+						+ p(5)*sin(src[0]),
+				p(6)*sin(src[0])
+						+ p(7)*sin(src[1])};
 	}
 }

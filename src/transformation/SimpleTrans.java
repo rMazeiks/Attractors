@@ -1,15 +1,12 @@
 package transformation;
 
-import javafx.beans.property.DoubleProperty;
-
-import java.util.List;
-
-import static java.lang.StrictMath.*;
+import static java.lang.StrictMath.cos;
+import static java.lang.StrictMath.sin;
 
 public class SimpleTrans extends Transformation {
-	public SimpleTrans()  {
+	public SimpleTrans() {
 		super();
-		initializeParams(8);
+		initializeParams(8, -2, 2);
 	}
 
 	static String transformationName() {
@@ -23,13 +20,12 @@ public class SimpleTrans extends Transformation {
 
 	@Override
 	public double[] doTransform(double[] src) {
-		List<DoubleProperty> p = parameters; // alias to save typing
 
-		return new double[] {
-			p.get(0).get()*sin(src[0]*p.get(4).get())
-					-p.get(1).get()*cos(src[1]*p.get(5).get()),
-			p.get(2).get()*sin(src[0]*p.get(6).get())
-					+p.get(3).get()*sin(src[1]*p.get(7).get())
+		return new double[]{
+				p(0) * sin(src[0] * p(4))
+						- p(1) * cos(src[1] * p(5)),
+				p(2) * sin(src[0] * p(6))
+						+ p(3) * sin(src[1] * p(7))
 		};
 	}
 }

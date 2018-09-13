@@ -5,18 +5,19 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import transformation.AvailableTransformations;
+import transformation.Transformation;
 
 
 public class TransformationAdder extends Stage {
 	Main main;
+	boolean windowCreated = false;
 
 	public TransformationAdder(Main main) {
 		this.main = main;
 	}
 
-	boolean windowCreated = false;
-	public void open()  {
-		if(!windowCreated) createWindow();
+	public void open() {
+		if (!windowCreated) createWindow();
 		windowCreated = true;
 
 		show();
@@ -24,13 +25,13 @@ public class TransformationAdder extends Stage {
 
 	private void createWindow() {
 		VBox buttons = new VBox();
-		for(AvailableTransformations a: AvailableTransformations.values())  {
+		for (AvailableTransformations a : AvailableTransformations.values()) {
 			Button button = new Button(a.getName());
-			button.setOnAction((event -> {
-				main.getTransformations().add(
-						a.getInitializer().newTransformation());
+			button.setOnAction(event -> {
+				Transformation newOne = a.getInitializer().newTransformation();
+				main.addTransformation(newOne);
 				this.close();
-			}));
+			});
 			buttons.getChildren().add(button);
 		}
 		setScene(new Scene(buttons));

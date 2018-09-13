@@ -8,7 +8,7 @@ import static java.lang.Math.*;
 public class FourDimWeird2 extends Transformation {
 
 	public FourDimWeird2() {
-		initializeParams(8);
+		initializeParams(8, -2 ,2);
 	}
 
 	static String transformationName() {
