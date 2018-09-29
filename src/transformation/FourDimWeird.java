@@ -16,12 +16,13 @@ public class FourDimWeird extends Transformation {
 		initializeParams(8, -2, 2);
 	}
 
-static 	String transformationName() {
+	@Override
+	public String transformationName() {
 		return "Four-Dimension Weird";
 	}
 
 	@Override
-	int getDimensions() {
+	protected int getDimensions() {
 		return 4;
 	}
 

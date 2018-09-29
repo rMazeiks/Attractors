@@ -23,12 +23,8 @@ public class Control extends VBox {
 		this.getChildren().add(sliderPlaceholder);
 		this.getChildren().add(new Buttons(main));
 
-		transformationList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Transformation>() {
-			@Override
-			public void changed(ObservableValue<? extends Transformation> observable, Transformation oldValue, Transformation newValue) {
-				updateSliders(newValue);
-			}
-		});
+		transformationList.getSelectionModel().selectedItemProperty().addListener(
+				(observable, oldValue, newValue) -> updateSliders(newValue));
 
 		setSpacing(40);
 		this.setPadding(new Insets(40));

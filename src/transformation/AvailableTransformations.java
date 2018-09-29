@@ -1,26 +1,45 @@
 package transformation;
 
+import transformation.helper.Rotate;
+import transformation.helper.Scale;
+import transformation.helper.Translate;
+
+import java.lang.reflect.InvocationTargetException;
+
 public enum AvailableTransformations {
-	SIMPLE(SimpleTrans.transformationName(), SimpleTrans::new), // todo someone please tell me there's a better way to do this.
-	FOUR(FourDimWeird.transformationName(), FourDimWeird::new),
-	EXP(FourDimWeird2.transformationName(), FourDimWeird2::new),
-	FLOWER(Flower.transformationName(), Flower::new),
-	ROTATE(Rotate.transformationName(), Rotate::new);
+	SIMPLE(new SimpleTrans()), // todo someone please tell me there's a better way to do this.
+	FOUR(new FourDimWeird()),
+	EXP(new FourDimWeird2()),
+	FLOWER(new Flower()),
+	FLOWER_OPT(new FlowerOptim()),
+
+	ROTATE(new Rotate()),
+	SCALE(new Scale()),
+	TRANSLATE(new Translate());
 
 
-	String name;
-	TransformationInitializer initializer;
+	Transformation base;
 
-	AvailableTransformations(String name, TransformationInitializer transformationInitializer) {
-		this.name = name;
-		initializer = transformationInitializer;
+	AvailableTransformations(Transformation t) {
+		base = t;
 	}
 
 	public String getName() {
-		return name;
+		return base.transformationName();
 	}
 
-	public TransformationInitializer getInitializer() {
-		return initializer;
+	public Transformation make() {
+		try {
+			return base.getClass().getConstructor().newInstance();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

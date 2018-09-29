@@ -9,12 +9,13 @@ public class SimpleTrans extends Transformation {
 		initializeParams(8, -2, 2);
 	}
 
-	static String transformationName() {
+	@Override
+	public String transformationName() {
 		return "Simple transformation";
 	}
 
 	@Override
-	int getDimensions() {
+	protected int getDimensions() {
 		return 2;
 	}
 

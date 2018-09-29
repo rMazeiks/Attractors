@@ -3,28 +3,27 @@ package transformation;
 import elements.Parameter;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import util.Adjustable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.StrictMath.random;
 
-public abstract class Transformation {
-	List<Parameter> parameters;
+public abstract class Transformation implements Adjustable {
+	protected List<Parameter> parameters;
 
-	Transformation() {
+	protected Transformation() {
 		parameters = new ArrayList<>();
 	}
 
-	static String transformationName() {
-		return "Abstract transformation";
-	}
+	public abstract String transformationName();
 
-	double p(int index) { // convenience function to save typing
+	protected double p(int index) { // convenience function to save typing
 		return parameters.get(index).get();
 	}
 
-	void initializeParams(int number, double min, double max) {
+	protected void initializeParams(int number, double min, double max) {
 		for (int i = 0; i < number; i++) {
 			Parameter dp = new Parameter(0, "Parameter "+ (i+1), min, max);
 			parameters.add(dp);
@@ -46,7 +45,7 @@ public abstract class Transformation {
 	/**
 	 * Returns the number of dimensions for the points this transformation handles.
 	 */
-	abstract int getDimensions();
+	protected abstract int getDimensions();
 
 	public final double[] transform(double[] src) {
 		return validify(src, doTransform(src));

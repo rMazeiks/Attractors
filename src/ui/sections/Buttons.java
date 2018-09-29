@@ -25,6 +25,10 @@ class Buttons extends HBox {
 				transformation.randomizeParams();
 			}
 		});
-		getChildren().addAll(save, random);
+
+		Button stop = new Button("Stop rendering");
+		stop.setOnAction(event -> main.stopRender());
+
+		getChildren().addAll(save, random, stop);
 	}
 }

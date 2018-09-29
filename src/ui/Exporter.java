@@ -1,6 +1,6 @@
 package ui;
 
-import elements.PositiveIntegerFilter;
+import elements.PositiveIntegerInput;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -41,16 +41,15 @@ public class Exporter extends Stage {
 		VBox inputs = new VBox();
 		{
 			Label wLabel = new Label("Width:");
-			TextField w = new TextField();
-			w.setTextFormatter(PositiveIntegerFilter.getFormatter(width));
+			TextField w = PositiveIntegerInput.makeTextField(width);
 
 			Label hLabel = new Label("Height:");
-			TextField h = new TextField();
-			h.setTextFormatter(PositiveIntegerFilter.getFormatter(height));
+			TextField h = PositiveIntegerInput.makeTextField(height);
+
 
 			Label iLabel = new Label("Iterations:");
-			TextField iterations = new TextField();
-			iterations.setTextFormatter(PositiveIntegerFilter.getFormatter(iterationProperty));
+			TextField iterations = PositiveIntegerInput.makeTextField(iterationProperty);
+
 			inputs.getChildren().addAll(wLabel, w, hLabel, h, iLabel, iterations);
 			inputs.setSpacing(10);
 		}

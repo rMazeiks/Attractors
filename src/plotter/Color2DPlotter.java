@@ -1,5 +1,6 @@
 package plotter;
 
+import elements.Parameter;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
@@ -13,25 +14,32 @@ import javafx.scene.paint.Color;
  */
 public class Color2DPlotter extends Plotter {
 	private long[][][] data;
-	private double zoom = 0.125;
 
 
 	public Color2DPlotter(int w, int h) {
 		super(w, h);
 		data = new long[h][w][3];
+		parameters.put("zoom", new Parameter(0.125, "Zoom", 0.1, 1));
+		parameters.put("sat", new Parameter(0.8, "Saturation", 0, 1));
+		parameters.put("col", new Parameter(360, "Color Scale", 90, 720));
+		parameters.put("off", new Parameter(0, "Color Offset", 0, 1));
+		Parameter boost = new Parameter(50, "Brightness Boost", 1, 200);
+		boost.setRequiresRefresh(false);
+		parameters.put("boost", boost);
+		parameters.put("x", new Parameter(0, "Translate X", -w / 2, w / 2));
+		parameters.put("y", new Parameter(0, "Translate Y", -h / 2, h / 2));
 	}
 
 	@Override
 	public void plot(double[] point) {
 		int min = Math.min(data.length, data[0].length);
-		if(Double.isNaN(point[0])) System.out.println("sdfsdf");
 
-		int x = (int) ((point[1] * zoom) * min + data[0].length / 2);
-		int y = (int) ((point[0] * zoom) * min + data.length / 2);
+		int x = (int) ((point[1] * p("zoom")) * min + data[0].length / 2 + p("x"));
+		int y = (int) ((point[0] * p("zoom")) * min + data.length / 2 + p("y"));
 
 		if (x < 0 || y < 0 || x >= data[0].length || y >= data.length) return;
 
-		Color hsb = Color.hsb(colorize(point[2]), 0.8, 1);
+		Color hsb = Color.hsb(colorize(point[2]), p("sat"), 1);
 
 		double f = 100;
 		data[y][x][0] += hsb.getRed() * f;
@@ -41,9 +49,9 @@ public class Color2DPlotter extends Plotter {
 	}
 
 	private double colorize(double v) {
-		double a = (v % 1);
+		double a = (v + p("off")) % 1;
 		if (a < 0) a += 1;
-		return a*360;
+		return a * p("col");
 	}
 
 	@Override
@@ -72,7 +80,7 @@ public class Color2DPlotter extends Plotter {
 	}
 
 	private double bright(double v) {
-		return 1-(Math.pow(1-v, 50));
+		return 1 - (Math.pow(1 - v, p("boost")));
 	}
 
 	@Override

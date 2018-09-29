@@ -28,7 +28,7 @@ public class TransformationAdder extends Stage {
 		for (AvailableTransformations a : AvailableTransformations.values()) {
 			Button button = new Button(a.getName());
 			button.setOnAction(event -> {
-				Transformation newOne = a.getInitializer().newTransformation();
+				Transformation newOne = a.make();
 				main.addTransformation(newOne);
 				this.close();
 			});

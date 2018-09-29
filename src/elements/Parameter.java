@@ -5,7 +5,36 @@ import javafx.beans.property.SimpleDoubleProperty;
 public class Parameter extends SimpleDoubleProperty {
 	private double min, max;
 	private boolean hasMin, hasMax;
+	private String name; // overriding to implement setName functionality
+	private boolean requiresRefresh = true;
 
+	public Parameter(double initialValue, String name, double min, double max) {
+		super(initialValue, name);
+		this.name = name;
+		if (min > max) throw new RuntimeException("min > max");
+		this.min = min;
+		this.max = max;
+		hasMax = hasMin = true;
+
+		set(initialValue); // todo figure out why this is needed. Sometimes get() didn't initially return the initialValue. weird.
+	}
+
+	public boolean doesRequireRefresh() {
+		return requiresRefresh;
+	}
+
+	public void setRequiresRefresh(boolean requiresRefresh) {
+		this.requiresRefresh = requiresRefresh;
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public boolean hasMin() {
 		return hasMin;
@@ -13,17 +42,6 @@ public class Parameter extends SimpleDoubleProperty {
 
 	public boolean hasMax() {
 		return hasMax;
-	}
-
-	public Parameter(double initialValue, String name, double min, double max) {
-		super(initialValue, name);
-		if (min > max) throw new RuntimeException("min > max");
-		this.min = min;
-		this.max = max;
-		hasMax = hasMin = true;
-
-
-		this.getName();
 	}
 
 	public double getMin() {

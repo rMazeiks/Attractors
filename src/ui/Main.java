@@ -1,5 +1,6 @@
 package ui;
 
+import elements.LabeledSlider;
 import elements.Parameter;
 import javafx.application.Application;
 import javafx.beans.property.DoubleProperty;
@@ -7,30 +8,41 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import plotter.Color2DPlotter;
 import plotter.Iterator;
-import plotter.Plotter;
+import plotter.PlotterProperty;
 import transformation.Transformation;
 import ui.sections.Control;
 
 public class Main extends Application {
-	private Plotter plotter;
+	BorderPane outputSection;
+	VBox plotterSliders;
+	private PlotterProperty plotter;
 	private ObservableList<Transformation> transformations = FXCollections.observableArrayList();
-	private ImageView output;
+	private ImageView outputView;
 	private Iterator render;
 	private DoubleProperty renderProgress = new SimpleDoubleProperty(0);
 	private Iterator preview;
 	private boolean needsPreview = false;
+	private StackPane renderContainer = new StackPane();
+
 
 	public Main() {
-		transformations.addListener((ListChangeListener<Transformation>) c -> update());
+		transformations.addListener((ListChangeListener<Transformation>) c -> refresh());
 	}
 
 	public ObservableList<Transformation> getTransformations() {
@@ -45,45 +57,114 @@ public class Main extends Application {
 		return renderProgress;
 	}
 
-	public Plotter getPlotter() {
+	public PlotterProperty getPlotter() {
 		return plotter;
 	}
 
-	public void setPlotter(Plotter p) {
+	public void setPlotter(PlotterProperty p) {
 		this.plotter = p;
 	}
 
 	@Override
 	public void start(Stage primaryStage) {
-		plotter = new Color2DPlotter(800, 600);
 
-		output = new ImageView();
+		outputView = new ImageView();
 
-		BorderPane app = new BorderPane();
-		app.setLeft(new ScrollPane(new Control(this)));
+		BorderPane all = new BorderPane();
+		all.setLeft(controlTabs());
 
-		BorderPane outputSection = new BorderPane();
+		outputSection = new BorderPane();
 		ProgressBar renderBar = new ProgressBar();
 		renderBar.progressProperty().bind(renderProgressProperty());
 		outputSection.setBottom(renderBar);
-		outputSection.setCenter(output);
-		app.setCenter(outputSection);
+		all.setCenter(outputSection);
 
-		primaryStage.setScene(new Scene(app));
+		primaryStage.setScene(new Scene(all));
 		primaryStage.show();
 		primaryStage.setMaximized(true);
 
-		update();
+		outputSection.setCenter(renderContainer);
+		renderContainer.getChildren().add(outputView);
+//		output.boundsInParentProperty().addListener((observable, oldValue, newValue) -> resize());
+//		resize();
+
+		makePlotter(900, 600);
+
+		refresh();
 	}
 
-	public void update() {
+	private void resize() {
+		System.out.println(renderContainer.getBoundsInParent().getWidth());
+
+		makePlotter(600, 400);
+
+		refresh();
+	}
+
+	private void makePlotter(int w, int h) {
+		plotter = new PlotterProperty();
+		plotter.set(new Color2DPlotter(w, h));
+
+		plotterSliders.getChildren().removeIf(node -> true); // remove all
+		for (Parameter param : getPlotter().get().getParameters()) {
+			LabeledSlider slider = new LabeledSlider(param);
+			plotterSliders.getChildren().add(slider);
+
+			param.addListener((observable, oldValue, newValue) -> {
+						if (param.doesRequireRefresh()) {
+							refresh();
+						} else {
+							update();
+						}
+					}
+			);
+		}
+	}
+
+	private void update() {
+		if (needsPreview) return; // gonna happen soon anyway
+
+		Task task = new Task<Image>() {
+			@Override
+			protected Image call() throws Exception {
+				return plotter.get().getOutput();
+			}
+		};
+		task.setOnSucceeded(event -> showImg(((Task<Image>) task).getValue()));
+		Thread th = new Thread(task);
+		th.setDaemon(true);
+		th.start();
+
+	}
+
+	private Node controlTabs() {
+		TabPane controlTabs = new TabPane();
+		controlTabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+
+		Tab transformationCtrls = new Tab();
+		transformationCtrls.setText("Transformations");
+		transformationCtrls.setContent(new ScrollPane(new Control(this)));
+
+		Tab plotterCtrls = new Tab();
+		plotterCtrls.setText("Plotter");
+		plotterSliders = new VBox();
+		plotterSliders.setSpacing(10);
+		plotterSliders.setPadding(new Insets(20));
+		plotterCtrls.setContent(plotterSliders);
+
+		controlTabs.getTabs().addAll(transformationCtrls, plotterCtrls);
+
+		return controlTabs;
+	}
+
+	public void refresh() {
 		if (render != null) render.cancel();
 
 		if (preview != null) {
 			needsPreview = true;
 		} else {
 
-			preview = new Iterator(transformations, plotter, 100000, 500);
+			preview = new Iterator(transformations, plotter.get(), 100000, 500);
 			needsPreview = false;
 
 			preview.setOnSucceeded(event -> {
@@ -92,7 +173,7 @@ public class Main extends Application {
 				preview = null;
 
 				if (needsPreview) {
-					update(); // generate the next preview
+					refresh(); // generate the next preview
 				} else {
 					render(1);
 				}
@@ -105,7 +186,7 @@ public class Main extends Application {
 	}
 
 	private void render(int iteration) {
-		render = new Iterator(transformations, plotter, (long) (100000 * Math.pow(1.5, iteration)), 500, false);
+		render = new Iterator(transformations, plotter.get(), (long) (100000 * Math.pow(1.5, iteration)), 500, false);
 
 		render.setOnSucceeded(event1 -> {
 			showImg(render.getValue());
@@ -117,13 +198,17 @@ public class Main extends Application {
 	}
 
 	private void showImg(Image value) {
-		output.setImage(value);
+		outputView.setImage(value);
 	}
 
 	public void addTransformation(Transformation newOne) {
 		transformations.add(newOne);
 		for (Parameter p : newOne.getParameters()) {
-			p.addListener((obs, o, n) -> update());
+			p.addListener((obs, o, n) -> refresh());
 		}
+	}
+
+	public void stopRender() {
+		render.cancel();
 	}
 }
