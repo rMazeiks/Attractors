@@ -16,7 +16,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import plotter.Color2DPlotter;
 import plotter.Iterator;
 import plotter.Plotter;
 
@@ -83,7 +82,7 @@ public class Exporter extends Stage {
 
 		if(file==null) return;
 
-		Plotter finalPlotter = new Color2DPlotter(width.get(), height.get());
+		Plotter finalPlotter = main.getPlotter().get().copyOfSize(width.get(), height.get());
 		Iterator finalRender = new Iterator(main.getTransformations(), finalPlotter, iterationProperty.get(), 500);
 
 		progressProperty.bind(finalRender.progressProperty());

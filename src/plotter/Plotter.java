@@ -15,6 +15,8 @@ public abstract class Plotter implements Adjustable {
 	Plotter(int w, int h) {
 	}
 
+	public abstract Plotter copyOfSize(int w, int h);
+
 	protected double p(String name) {
 		return parameters.get(name).getValue();
 	}

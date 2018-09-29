@@ -94,7 +94,7 @@ public class Main extends Application {
 	}
 
 	private void resize() {
-		System.out.println(renderContainer.getBoundsInParent().getWidth());
+//		System.out.println(renderContainer.getBoundsInParent().getWidth());
 
 		makePlotter(600, 400);
 
@@ -126,7 +126,7 @@ public class Main extends Application {
 
 		Task task = new Task<Image>() {
 			@Override
-			protected Image call() throws Exception {
+			protected Image call() {
 				return plotter.get().getOutput();
 			}
 		};

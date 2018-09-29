@@ -5,6 +5,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
+import util.CommonJava;
 
 /**
  * Plots three dimensions:
@@ -28,6 +29,13 @@ public class Color2DPlotter extends Plotter {
 		parameters.put("boost", boost);
 		parameters.put("x", new Parameter(0, "Translate X", -w / 2, w / 2));
 		parameters.put("y", new Parameter(0, "Translate Y", -h / 2, h / 2));
+	}
+
+	@Override
+	public Plotter copyOfSize(int w, int h) {
+		Color2DPlotter plotter = new Color2DPlotter(w, h);
+		plotter.parameters = CommonJava.clone(this.parameters);
+		return plotter;
 	}
 
 	@Override

@@ -44,7 +44,6 @@ public class PositiveIntegerInput implements UnaryOperator<TextFormatter.Change>
 				@Override
 				public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 					bound.setValue(Integer.parseInt(newValue));
-					System.out.println("Changed");
 				}
 			});
 		}

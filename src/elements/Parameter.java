@@ -19,6 +19,11 @@ public class Parameter extends SimpleDoubleProperty {
 		set(initialValue); // todo figure out why this is needed. Sometimes get() didn't initially return the initialValue. weird.
 	}
 
+	@Override
+	public Parameter clone() {
+		return new Parameter(get(), getName(), min, max);
+	}
+
 	public boolean doesRequireRefresh() {
 		return requiresRefresh;
 	}

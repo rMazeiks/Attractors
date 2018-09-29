@@ -20,6 +20,11 @@ public class Simple2dPlotter extends Plotter {
 		count = new int[h][w];
 	}
 
+	@Override
+	public Plotter copyOfSize(int w, int h) {
+		return new Simple2dPlotter(w, h);
+	}
+
 	public void plot(double[] point) {
 		int min = Math.min(count.length, count[0].length);
 		int x = (int) ((point[1] * zoom) * min + count[0].length / 2);
