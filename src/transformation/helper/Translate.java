@@ -13,7 +13,7 @@ public class Translate extends Transformation {
 		parameters.get(0).set(0);
 		parameters.get(0).setName("X-displacement");
 		parameters.get(1).set(0);
-		parameters.get(0).setName("Y-displacement");
+		parameters.get(1).setName("Y-displacement");
 	}
 
 	@Override

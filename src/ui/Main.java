@@ -22,7 +22,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import plotter.Color2DPlotter;
+import plotter.Color3DPlotter;
 import plotter.Iterator;
 import plotter.PlotterProperty;
 import transformation.Transformation;
@@ -34,7 +34,7 @@ import ui.sections.Control;
 public class Main extends Application {
 	BorderPane outputSection;
 	VBox plotterSliders;
-	private PlotterProperty plotter;
+	private PlotterProperty plotter = new PlotterProperty();
 	private ObservableList<Transformation> transformations = FXCollections.observableArrayList();
 	private ImageView outputView;
 	private Iterator render;
@@ -105,8 +105,7 @@ public class Main extends Application {
 	}
 
 	private void makePlotter(int w, int h) {
-		plotter = new PlotterProperty();
-		plotter.set(new Color2DPlotter(w, h));
+		plotter.set(new Color3DPlotter(w, h));
 
 		plotterSliders.getChildren().removeIf(node -> true); // remove all
 		for (Parameter param : getPlotter().get().getParameters()) {
@@ -160,6 +159,10 @@ public class Main extends Application {
 		return controlTabs;
 	}
 
+	/**
+	 * Should be called whenever the attractor's rendering needs to be repeated.
+	 * This will not necessarily immediately start the preview render. If another preview render is in progress, it will be finished to reflect the previous changes
+	 */
 	public void refresh() {
 		if (render != null) render.cancel();
 
