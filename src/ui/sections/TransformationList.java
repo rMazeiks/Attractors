@@ -11,6 +11,9 @@ import ui.Main;
 import ui.TransformationAdder;
 
 
+/**
+ * A section of the GUI that shows the Transformations used
+ */
 class TransformationList extends VBox {
 	private ListView<Transformation> listView;
 

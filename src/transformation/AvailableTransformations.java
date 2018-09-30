@@ -6,8 +6,11 @@ import transformation.helper.Translate;
 
 import java.lang.reflect.InvocationTargetException;
 
+/**
+ * Enumerates the available transformations that the user can add and use
+ */
 public enum AvailableTransformations {
-	SIMPLE(new SimpleTrans()), // todo someone please tell me there's a better way to do this.
+	SIMPLE(new SimpleTrans()),
 	FOUR(new FourDimWeird()),
 	EXP(new FourDimWeird2()),
 	FLOWER(new Flower()),

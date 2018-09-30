@@ -10,6 +10,9 @@ import java.util.Arrays;
 import static java.lang.Math.min;
 import static java.lang.Math.pow;
 
+/**
+ * A simple Plotter that only plots the x and y values (the first two dimensions) of the points it receives. They are plotted as white on black.
+ */
 public class Simple2dPlotter extends Plotter {
 	private int[][] count;
 	private double zoom = 0.25;

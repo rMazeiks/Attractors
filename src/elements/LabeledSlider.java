@@ -5,9 +5,19 @@ import javafx.scene.control.Slider;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 
+/**
+ * A slider that is used to control a Parameter.
+ * Displays the minimum and maximum values of the parameter. Does not allow values outside this range.
+ * Also displays the name of the Parameter together with the current value
+ */
 public class LabeledSlider extends BorderPane {
 	private Slider slider;
 
+	/**
+	 * Initializes the slider and sets the Parameter it controls.
+	 *
+	 * @param parameter
+	 */
 	public LabeledSlider(Parameter parameter) {
 		slider = new Slider();
 		slider.setMin(parameter.getMin());

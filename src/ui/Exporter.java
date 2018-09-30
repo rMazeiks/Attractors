@@ -24,18 +24,22 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * A pop-up window that the user can use to render and export the Attractor.
+ */
 public class Exporter extends Stage {
 	private Main main;
 	private IntegerProperty width = new SimpleIntegerProperty(1200);
 	private IntegerProperty height = new SimpleIntegerProperty(900);
 	private IntegerProperty iterationProperty = new SimpleIntegerProperty(420000000);
 	private DoubleProperty progressProperty = new SimpleDoubleProperty(0);
+	private boolean windowCreated = false;
 
 	public Exporter(Main main) {
 		this.main = main;
 	}
 
-	private void createWindow()  {
+	private void createWindow() {
 		VBox exporter = new VBox();
 		VBox inputs = new VBox();
 		{
@@ -66,9 +70,8 @@ public class Exporter extends Stage {
 		this.setScene(new Scene(exporter));
 	}
 
-	private boolean windowCreated = false;
 	public void open() {
-		if(!windowCreated) createWindow();
+		if (!windowCreated) createWindow();
 		windowCreated = true;
 
 		this.show();
@@ -80,7 +83,7 @@ public class Exporter extends Stage {
 		fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("PNG image", "png"));
 		File file = fileChooser.showSaveDialog(this);
 
-		if(file==null) return;
+		if (file == null) return;
 
 		Plotter finalPlotter = main.getPlotter().get().copyOfSize(width.get(), height.get());
 		Iterator finalRender = new Iterator(main.getTransformations(), finalPlotter, iterationProperty.get(), 500);

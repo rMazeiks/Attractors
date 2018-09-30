@@ -8,10 +8,12 @@ import javafx.scene.paint.Color;
 import util.CommonJava;
 
 /**
- * Plots three dimensions:
+ * A Plotter that plots three dimensions:
  * [0] - the y axis
  * [1] - the x axis
  * [2] - changes the hue of the color plotted
+ *
+ * This plotter has a few parameters that affect how the points are rendered.
  */
 public class Color2DPlotter extends Plotter {
 	private long[][][] data;

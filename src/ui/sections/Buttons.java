@@ -1,13 +1,14 @@
 package ui.sections;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import transformation.Transformation;
 import ui.Exporter;
 import ui.Main;
 
+/**
+ * A section of the GUI that contains buttons for saving (exporting) the render, randomizing Parameters, and canceling the render process.
+ */
 class Buttons extends HBox {
 	private final Main main;
 
@@ -17,7 +18,10 @@ class Buttons extends HBox {
 		Exporter e = new Exporter(main);
 
 		Button save = new Button("Save");
-		save.setOnAction(event -> e.open());
+		save.setOnAction(event -> {
+			main.stopRender();
+			e.open();
+		});
 
 		Button random = new Button("Randomize parameters");
 		random.setOnAction(event -> {

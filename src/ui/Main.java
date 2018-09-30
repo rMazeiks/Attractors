@@ -28,6 +28,9 @@ import plotter.PlotterProperty;
 import transformation.Transformation;
 import ui.sections.Control;
 
+/**
+ * A class that puts everything together, and contains references to all the data in the "project"
+ */
 public class Main extends Application {
 	BorderPane outputSection;
 	VBox plotterSliders;

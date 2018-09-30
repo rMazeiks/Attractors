@@ -2,10 +2,9 @@ package transformation.helper;
 
 import transformation.Transformation;
 
-import static java.lang.Math.cos;
-import static java.lang.Math.scalb;
-import static java.lang.Math.sin;
-
+/**
+ * Scales all the values of the point
+ */
 public class Scale extends Transformation {
 
 	@Override

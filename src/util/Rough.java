@@ -1,12 +1,20 @@
 package util;
 
+/**
+ * A class that contains approximations of various functions.
+ * These should run faster than the actual functions, but this has not been tested todo
+ */
 public class Rough {
 
 	/**
 	 * A continuous function that kinda looks like the sine wave. I mean, it starts at 0 and then smoothly goes up to 1(at PI/2), and then back to 0 at PI, etc.
 	 * It's actually composed of upwards and downwards sloping parabolas, so it should be a bit faster to compute.
 	 * Please do not use this for a rotation matrix where precision is required, or anything like that.
-	 * Maximum deviation from sine: 'bout 0.056
+	 * Also, don't use it for making calculations to launch rockets. The rockets will crash.
+	 *
+	 * Maximum deviation from sine: about 0.056
+	 *
+	 * I figured out the function with the help of Desmos. Thank you, Desmos!!
 	 *
 	 * @param x the angle, in radians
 	 * @return a quick approximation of sine
@@ -19,7 +27,7 @@ public class Rough {
 	}
 
 	/**
-	 * A continuous function that kinda looks like the cosine wave.
+	 * A continuous function that kinda looks like the cosine wave. Based on <code>pseudoSin</code>
 	 *
 	 * @param x the angle, in radians
 	 * @return an approximation of cosine
@@ -36,6 +44,7 @@ public class Rough {
 	static double pseudoTan(double x)  {
 		return pseudoSin(x)/pseudoCos(x);
 	}
+
 	/**
 	 * An actual modulo
 	 *

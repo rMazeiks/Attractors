@@ -2,6 +2,9 @@ package transformation.helper;
 
 import transformation.Transformation;
 
+/**
+ * Translates (shifts) the x and y values of the point (the first 2 dimensions)
+ */
 public class Translate extends Transformation {
 
 	public Translate() {

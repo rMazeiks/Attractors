@@ -2,17 +2,15 @@ package ui.sections;
 
 import elements.LabeledSlider;
 import elements.Parameter;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
 import javafx.scene.layout.VBox;
 import transformation.Transformation;
 import ui.Main;
 
 import java.util.List;
 
+/**
+ * A section of the GUI showing sliders that can be used to control the selected Transformation.
+ */
 class Sliders extends VBox  {
 	private final Main main;
 

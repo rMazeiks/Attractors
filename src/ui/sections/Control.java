@@ -1,7 +1,5 @@
 package ui.sections;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
@@ -9,6 +7,12 @@ import javafx.scene.layout.VBox;
 import transformation.Transformation;
 import ui.Main;
 
+/**
+ * A section of the GUI that contains:
+ * - A list representation of the Transformations
+ * - Sliders to control the transformation's parameters (when applicable)
+ * - The Buttons section
+ */
 public class Control extends VBox {
 	BorderPane sliderPlaceholder;
 	private Main main;

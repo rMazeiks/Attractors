@@ -8,6 +8,9 @@ import transformation.AvailableTransformations;
 import transformation.Transformation;
 
 
+/**
+ * A pop-up window that the user can use to add transformations to the "project"
+ */
 public class TransformationAdder extends Stage {
 	Main main;
 	boolean windowCreated = false;

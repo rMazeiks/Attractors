@@ -11,12 +11,14 @@ import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 
 /**
+ * Provides the possibility to create text fields that only accept integer inputs.
+ * Invalid characters cannot be typed inside the text field.
  * Copy-pasted (with modifications) from https://stackoverflow.com/a/36749659
  */
 public class PositiveIntegerInput implements UnaryOperator<TextFormatter.Change> {
 	private final static Pattern DIGIT_PATTERN = Pattern.compile("\\d*");
 
-	public static TextFormatter<Integer> getFormatter(IntegerProperty integerProperty) {
+	private static TextFormatter<Integer> getFormatter(IntegerProperty integerProperty) {
 		TextFormatter<Integer> ans = new TextFormatter<>(
 				new IntegerStringConverter(), // Standard converter form JavaFX
 				integerProperty.get(),
@@ -25,6 +27,12 @@ public class PositiveIntegerInput implements UnaryOperator<TextFormatter.Change>
 		return ans;
 	}
 
+	/**
+	 * Creates a text field that only accepts positive integer values. Binds the specified IntegerProperty to the contents of the TextField.
+	 *
+	 * @param def
+	 * @return
+	 */
 	public static TextField makeTextField(IntegerProperty def)  {
 		IntTextField tf = new IntTextField(def);
 		tf.setTextFormatter(PositiveIntegerInput.getFormatter(def));

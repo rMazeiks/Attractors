@@ -5,6 +5,9 @@ import transformation.Transformation;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
+/**
+ * Rotates the point, affecting only the x and y (the first two dimensions) coordinates of the point.
+ */
 public class Rotate extends Transformation {
 
 	public Rotate() {

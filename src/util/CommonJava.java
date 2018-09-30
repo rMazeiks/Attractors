@@ -20,13 +20,9 @@ public class CommonJava {
 
 		HashMap<String, Parameter> copy = new HashMap<String, Parameter>();
 		for (Map.Entry<String, Parameter> entry : original.entrySet()) {
-			try {
-				copy.put(entry.getKey(),
-						// Or whatever List implementation you'd like here.
-						entry.getValue().clone());
-			} catch (CloneNotSupportedException e) {
-				e.printStackTrace();
-			}
+			copy.put(entry.getKey(),
+					// Or whatever List implementation you'd like here.
+					entry.getValue().clone());
 		}
 		return copy;
 	}
