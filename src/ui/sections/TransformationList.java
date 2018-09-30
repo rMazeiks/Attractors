@@ -1,11 +1,10 @@
 package ui.sections;
 
 import javafx.collections.ObservableList;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.MultipleSelectionModel;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 import transformation.Transformation;
 import ui.Main;
 import ui.TransformationAdder;
@@ -24,6 +23,22 @@ class TransformationList extends VBox {
 
 		listView = new ListView<>();
 		listView.setItems(transformations);
+		listView.setCellFactory(new Callback<>() {
+			@Override
+			public ListCell<Transformation> call(ListView<Transformation> param) {
+				return new ListCell<>() {
+					@Override
+					public void updateItem(Transformation item, boolean empty) {
+						super.updateItem(item, empty);
+						if (item != null && !empty) {
+							setGraphic(new Label(item.transformationName()));
+						} else {
+							setGraphic(new Label(""));
+						}
+					}
+				};
+			}
+		});
 
 		MultipleSelectionModel<Transformation> selectionModel = listView.getSelectionModel();
 
