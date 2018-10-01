@@ -65,20 +65,22 @@ public class Color3DPlotter extends Plotter {
 		double y3 = -sin(p("rotx")) * z2 + cos(p("rotx")) * y2;
 		double x3 = x2;
 
-		double XX = atan(x3 / (z3 + p("depth")));
-		double YY = atan(y3 / (z3 + p("depth")));
+		double depth = (z3 + p("depth"));
+		if (depth < 0) return;// behind camera
+		double XX = atan(x3 / depth);
+		double YY = atan(y3 / depth);
 
 		int column = (int) ((XX * p("zoom")) * min + data[0].length / 2);
 		int row = (int) ((YY * p("zoom")) * min + data.length / 2);
 
-		if (column < 0 || row < 0 || column >= data[0].length || row >= data.length) return;
+		if (column < 0 || row < 0 || column >= data[0].length || row >= data.length) return; // outside of view
 
 		Color hsb = Color.hsb(colorize(point[3]), p("sat"), 1);
 
-		double f = 100;
-		data[row][column][0] += hsb.getRed() * f;
-		data[row][column][1] += hsb.getGreen() * f;
-		data[row][column][2] += hsb.getBlue() * f;
+		double brightness = 100 * (atan(1 / depth) / PI * 2); // points further away are "smaller", less bright
+		data[row][column][0] += hsb.getRed() * brightness;
+		data[row][column][1] += hsb.getGreen() * brightness;
+		data[row][column][2] += hsb.getBlue() * brightness;
 
 	}
 

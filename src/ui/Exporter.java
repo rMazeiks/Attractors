@@ -75,6 +75,7 @@ public class Exporter extends Stage {
 		windowCreated = true;
 
 		this.show();
+		this.requestFocus();
 	}
 
 	private void export() {
