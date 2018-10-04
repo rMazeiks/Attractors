@@ -32,8 +32,10 @@ import ui.sections.Control;
  * A class that puts everything together, and contains references to all the data in the "project"
  */
 public class Main extends Application {
-	BorderPane outputSection;
-	VBox plotterSliders;
+	static int RESET_INTERVAL = 100;
+
+	private BorderPane outputSection;
+	private VBox plotterSliders;
 	private PlotterProperty plotter = new PlotterProperty();
 	private ObservableList<Transformation> transformations = FXCollections.observableArrayList();
 	private ImageView outputView;
@@ -88,18 +90,8 @@ public class Main extends Application {
 
 		outputSection.setCenter(renderContainer);
 		renderContainer.getChildren().add(outputView);
-//		output.boundsInParentProperty().addListener((observable, oldValue, newValue) -> resize());
-//		resize();
 
 		makePlotter(900, 600);
-
-		refresh();
-	}
-
-	private void resize() {
-//		System.out.println(renderContainer.getBoundsInParent().getWidth());
-
-		makePlotter(600, 400);
 
 		refresh();
 	}
@@ -123,16 +115,20 @@ public class Main extends Application {
 		}
 	}
 
+	/**
+	 * Asynchronously finalizes the output of the plotter and shows it
+	 */
 	private void update() {
 		if (needsPreview) return; // gonna happen soon anyway
 
-		Task task = new Task<Image>() {
+		Task<Image> task = new Task<Image>() {
 			@Override
 			protected Image call() {
 				return plotter.get().getOutput();
 			}
 		};
-		task.setOnSucceeded(event -> showImg(((Task<Image>) task).getValue()));
+		task.setOnSucceeded(event -> showImg(task.getValue()));
+
 		Thread th = new Thread(task);
 		th.setDaemon(true);
 		th.start();
@@ -160,22 +156,23 @@ public class Main extends Application {
 	}
 
 	/**
-	 * Should be called whenever the attractor's rendering needs to be repeated.
+	 * Should be called whenever the attractor's preview rendering needs to be repeated.
 	 * This will not necessarily immediately start the preview render. If another preview render is in progress, it will be finished to reflect the previous changes
+	 *
+	 * When the preview rendering is done, if there is no need for a repeat preview rendering, the improved render is started
 	 */
 	public void refresh() {
 		if (render != null) render.cancel();
 
 		if (preview != null) {
 			needsPreview = true;
-		} else {
 
-			preview = new Iterator(transformations, plotter.get(), 100000, 500);
+		} else {
+			preview = new Iterator(transformations, plotter.get(), 100000, RESET_INTERVAL);
 			needsPreview = false;
 
 			preview.setOnSucceeded(event -> {
 				showImg(preview.getValue());
-
 				preview = null;
 
 				if (needsPreview) {
@@ -192,7 +189,7 @@ public class Main extends Application {
 	}
 
 	private void render(int iteration) {
-		render = new Iterator(transformations, plotter.get(), (long) (100000 * Math.pow(1.5, iteration)), 500, false);
+		render = new Iterator(transformations, plotter.get(), (long) (100000 * Math.pow(1.5, iteration)), RESET_INTERVAL, false);
 
 		render.setOnSucceeded(event1 -> {
 			showImg(render.getValue());
@@ -210,7 +207,7 @@ public class Main extends Application {
 	public void addTransformation(Transformation newOne) {
 		transformations.add(newOne);
 		for (Parameter p : newOne.getParameters()) {
-			p.addListener((obs, o, n) -> refresh());
+			p.addListener(observable -> refresh());
 		}
 	}
 

@@ -24,6 +24,7 @@ public class TransformationAdder extends Stage {
 		windowCreated = true;
 
 		show();
+		requestFocus();
 	}
 
 	private void createWindow() {

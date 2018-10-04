@@ -3,8 +3,8 @@ package ui.sections;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import transformation.Transformation;
-import ui.Exporter;
 import ui.Main;
+import ui.export.Exporter;
 
 /**
  * A section of the GUI that contains buttons for saving (exporting) the render, randomizing Parameters, and canceling the render process.

@@ -26,6 +26,10 @@ This project is a tool I made so that I could play with attractors. It lets you 
 ## Examples
 ![crazy strokes](readme-files/crazy.png)
 
+![wave](readme-files/wave.png)
+
+![animation](readme-files/animation.gif)
+
 ## Technical details
 - The GUI is written in javafx.
 - Rendering is progressive, so a change the user makes is instantly reflected by a quick and noisy render, which is subsequently continuously improved.

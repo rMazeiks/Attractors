@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * A Plotter is a class that is able to plot n-dimensional points and produce an output in the form of an Image.
+ * A Plotter is a class that is able to plot n-dimensional points and produce an output in the form of an ImageExp.
  */
 public abstract class Plotter implements Adjustable {
 
