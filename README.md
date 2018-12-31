@@ -3,9 +3,9 @@
 
 > An attractor is a set of numerical values toward which a system tends to evolve, for a wide variety of starting conditions of the system ([From Wikipedia, the free encyclopedia](https://en.wikipedia.org/wiki/Attractor))
 
-... whatever that means. An attractor is this really pretty thing you get if you move points around in interesting ways and keep track of where the points go by drawing something:
+An attractor is this really pretty thing you get if you move points around in interesting ways and keep track of where the points go by drawing something:
 
-![sea attractor](readme-files/sea.png)
+![sea](readme-files/sea.png)
 
 I think it's pretty, at least.
 
